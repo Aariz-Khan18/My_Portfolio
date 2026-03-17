@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aariz Khan | Tech Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --text-light: #e0e0e0;
+            --text-dim: #888;
+            --neon-accent: #00ffcc;
+            --card-bg: #111;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+        }
+
+        /* Top Header & Logo */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2000;
+            background: transparent;
+            transition: background 0.3s;
+        }
+
+        header.scrolled {
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 204, 0.1);
+        }
+
+        .dev-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-light);
+            letter-spacing: 1px;
+        }
+
+        .dev-logo span {
+            color: var(--neon-accent);
+        }
+
+        /* Hamburger Menu Button */
+        .menu-btn {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all .5s ease-in-out;
+            z-index: 2000;
+        }
+        
+        .menu-btn__burger {
+            width: 30px;
+            height: 3px;
+            background: var(--neon-accent);
+            border-radius: 5px;
+            transition: all .5s ease-in-out;
+        }
+        
+        .menu-btn__burger::before,
+        .menu-btn__burger::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background: var(--neon-accent);
+            border-radius: 5px;
+            transition: all .5s ease-in-out;
+        }
+        
+        .menu-btn__burger::before { transform: translateY(-10px); }
+        .menu-btn__burger::after { transform: translateY(10px); }
+        
+        .menu-btn.open .menu-btn__burger { transform: translateX(-50px); background: transparent; }
+        .menu-btn.open .menu-btn__burger::before { transform: rotate(45deg) translate(35px, -35px); }
+        .menu-btn.open .menu-btn__burger::after { transform: rotate(-45deg) translate(35px, 35px); }
+
+        /* Full Screen Overlay Nav */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease-in-out;
+            z-index: 1500;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-overlay a {
+            font-size: 2rem;
+            color: var(--text-light);
+            text-decoration: none;
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .nav-overlay a:hover {
+            color: var(--neon-accent);
+            transform: scale(1.1);
+        }
+
+        /* Layout & Typography */
+        section {
+            padding: 120px 10vw 80px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2.section-title {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--text-light);
+            position: relative;
+            display: inline-block;
+        }
+
+        h2.section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 50%;
+            height: 3px;
+            background: var(--neon-accent);
+            border-radius: 2px;
+        }
+
+        /* Cards & Grids */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.1);
+            border-color: rgba(0, 255, 204, 0.3);
+        }
+
+        .card h3 { color: var(--neon-accent); margin-bottom: 15px; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+        .card p { color: var(--text-dim); margin-bottom: 8px; line-height: 1.5; }
+        .card .highlight { color: var(--text-light); font-weight: bold; }
+        
+        .activities {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+        }
+        .activities strong { color: var(--neon-accent); display: block; margin-bottom: 5px; }
+
+        /* Alignment Link Box (For the new Courses section) */
+        .cert-link-box {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 204, 0.2);
+        }
+        .cert-link-box span {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .cert-link-box strong {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        /* Buttons & Links */
+        .btn {
+            padding: 12px 28px;
+            background: transparent;
+            color: var(--neon-accent);
+            border: 2px solid var(--neon-accent);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 100%;
+            background: var(--neon-accent);
+            transition: width 0.3s;
+            z-index: -1;
+        }
+
+        .btn:hover::before { width: 100%; }
+        .btn:hover { color: var(--bg-dark) !important; }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .view-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .view-link:hover { color: var(--neon-accent); }
+
+        /* Social Icons */
+        .social-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .social-grid a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            color: var(--text-light);
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+            flex: 1 1 calc(33.333% - 15px);
+            min-width: 140px;
+            justify-content: center;
+        }
+        .social-grid a:hover {
+            border-color: var(--neon-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.15);
+        }
+
+        /* --- Animations Classes --- */
+        .anim-fade-up { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+        .anim-slide-left { opacity: 0; transform: translateX(-50px); transition: all 0.8s ease-out; }
+        .anim-slide-right { opacity: 0; transform: translateX(50px); transition: all 0.8s ease-out; }
+        .anim-scale { opacity: 0; transform: scale(0.9); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        .in-view { opacity: 1 !important; transform: translate(0) scale(1) !important; }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+
+        /* --- MOBILE RESPONSIVENESS (Media Queries) --- */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            section { padding: 100px 5vw 60px; }
+            
+            #home h1 { font-size: 3rem !important; }
+            #typing-text { font-size: 1.5rem !important; min-height: 2.5rem; }
+            
+            h2.section-title { font-size: 2rem; }
+            
+            .btn-group { flex-direction: column; width: 100%; }
+            .btn { width: 100%; }
+
+            .social-grid a { flex: 1 1 100%; justify-content: flex-start; padding-left: 20px; }
+            
+            .grid-container { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="dev-logo"><span>&lt;</span>Aariz <span>/&gt;</span></div>
+        <div class="menu-btn" id="menu-btn">
+            <div class="menu-btn__burger"></div>
+        </div>
+    </header>
+
+    <div class="nav-overlay" id="nav-overlay">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#education" class="nav-link">Education</a>
+        <a href="#academics" class="nav-link">Academics</a>
+        <a href="#portfolio" class="nav-link">Portfolio</a>
+        <a href="#contact" class="nav-link">Contact</a>
+    </div>
+
+    <section id="home">
+        <p class="anim-fade-up" style="color: var(--neon-accent); font-family: monospace; font-size: 1.1rem; margin-bottom: 10px;">> System.out.println("Hello World"); I am</p>
+        <h1 class="anim-fade-up delay-1" style="font-size: 4.5rem; margin-bottom: 10px; line-height: 1.1;">Aariz Khan.</h1>
+        <h2 class="anim-fade-up delay-2" style="font-size: 2rem; color: var(--text-dim); margin-bottom: 25px;" id="typing-text"></h2>
+        <p class="anim-fade-up delay-3" style="max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; line-height: 1.6;">
+            A Computer Science Engineering student passionate about building responsive web applications, robust Linux systems, and practical tech solutions. 
+        </p>
+        <div class="btn-group anim-fade-up delay-4">
+            <a href="resume.pdf" download class="btn"><i class="fas fa-download"></i> Download Resume</a>
+            <a href="#contact" class="btn" style="border-color: #fff; color: #fff;">Let's Connect</a>
+            <a href="https://aariz-blogs.onrender.com" target="_blank" class="btn" style="border-color: #fff; color: #fff;">Read Blog</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2 class="section-title anim-slide-left">About Me</h2>
+        <p class="anim-fade-up delay-1" style="max-width: 800px; font-size: 1.1rem; margin-bottom: 40px;">
+            I am a B.Tech CSE student focused on the intersection of front-end development and system-level administration. My goal is to grow as a well-rounded tech professional who can both build impactful applications and maintain efficient, reliable IT infrastructures.
+        </p>
+    </section>
+
+    <section id="education">
+        <h2 class="section-title anim-slide-left">Education History</h2>
+        <div class="grid-container">
+            <div class="card anim-scale delay-1">
+                <h3><i class="fas fa-graduation-cap"></i> B.Tech - CSE</h3>
+                <p class="highlight">Rajiv Gandhi Prodyogiki Vishwavidyalaya</p>
+                <p>2023 - 2027 | Grade: <span style="color: var(--text-light);">7+ CGPA</span></p>
+                <div class="activities">
+                    <strong>Other Activities:</strong>
+                    Community Outreach Projects (Swachh Bharat Abhiyan), Rural Development Initiatives, Academic Seminars.
+                </div>
+            </div>
+            <div class="card anim-scale delay-2">
+                <h3><i class="fas fa-school"></i> Class 12th (PCM)</h3>
+                <p class="highlight">Govt. Higher Secondary School, Datia</p>
+                <p>Jul 2022 - Mar 2023 | Grade: <span style="color: var(--text-light);">70+%</span></p>
+                <div class="activities">
+                    <strong>Other Activities:</strong>
+                    Environmental Education and Disaster Management training.
+                </div>
+            </div>
+            <div class="card anim-scale delay-3">
+                <h3><i class="fas fa-book"></i> Class 10th (ICSE)</h3>
+                <p class="highlight">Holy Cross Ashram School, Datia</p>
+                <p>Jul 2020 - Jul 2021 | Grade: <span style="color: var(--text-light);">70+%</span></p>
+                <div class="activities">
+                    <strong>Other Activities:</strong>
+                    SUPW & Community Service focusing on core subjects.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="academics">
+        <h2 class="section-title anim-slide-right">Academic Expertise & Industry Alignment</h2>
+        <p class="anim-fade-up delay-1" style="font-size: 1.1rem; color: var(--text-dim); margin-bottom: 40px; max-width: 800px;">
+            I believe in bridging theoretical university coursework with modern, practical industry standards. Below is a mapping of my core RGPV engineering subjects to my professional certifications.
+        </p>
+
+        <div class="grid-container">
+            <div class="card anim-fade-up delay-1" style="border-top: 3px solid var(--neon-accent);">
+                <h3><i class="fas fa-microchip"></i> Hardware & IT Support</h3>
+                <p>● <strong>CS-404:</strong> Computer Org. & Architecture (COA)</p>
+                <p>● <strong>BT-205:</strong> Basic Computer Engineering</p>
+                <p>● <strong>CS-304:</strong> Digital Systems</p>
+                <div class="cert-link-box">
+                    <span>Practically Aligned With:</span>
+                    <strong>Microsoft IT Support Specialist (Coursera)</strong>
+                </div>
+            </div>
+
+            <div class="card anim-fade-up delay-2" style="border-top: 3px solid var(--neon-accent);">
+                <h3><i class="fas fa-globe"></i> Front-End & Web Tech</h3>
+                <p>● <strong>CS-504 (A):</strong> Internet and Web Technology</p>
+                <p>● <strong>CS-603 (B):</strong> Computer Graphics & Visualization</p>
+                <div class="cert-link-box">
+                    <span>Practically Aligned With:</span>
+                    <strong>HTML, CSS & JS for Web Dev (Coursera)</strong>
+                </div>
+            </div>
+
+            <div class="card anim-fade-up delay-3" style="border-top: 3px solid var(--neon-accent);">
+                <h3><i class="fab fa-linux"></i> Systems & Open Source</h3>
+                <p>● <strong>CS-505:</strong> Lab (Linux)</p>
+                <p>● <strong>CS-405:</strong> Operating System</p>
+                <div class="cert-link-box">
+                    <span>Practically Aligned With:</span>
+                    <strong>Open Source Dev, Linux & Git (Coursera)</strong>
+                </div>
+            </div>
+
+            <div class="card anim-fade-up delay-4" style="border-top: 3px solid var(--neon-accent);">
+                <h3><i class="fas fa-network-wired"></i> Networking & Security</h3>
+                <p>● <strong>CS-602:</strong> Computer Network</p>
+                <p>● <strong>CS-503 (C):</strong> Cyber Security</p>
+                <p>● <strong>CS-702 (C):</strong> Wireless & Mobile Computing</p>
+                <div class="cert-link-box">
+                    <span>Practically Aligned With:</span>
+                    <strong>Introduction to Networking (NVIDIA/Coursera)</strong>
+                </div>
+            </div>
+
+            <div class="card anim-fade-up delay-5" style="border-top: 3px solid var(--neon-accent);">
+                <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
+                <p>● <strong>CS-601:</strong> Machine Learning</p>
+                <p>● <strong>CS-506:</strong> Lab (Python)</p>
+                <div class="cert-link-box">
+                    <span>Practically Aligned With:</span>
+                    <strong>Google AI Essentials (Coursera)</strong>
+                </div>
+            </div>
+
+            <div class="card anim-fade-up delay-1" style="border-top: 3px solid var(--neon-accent);">
+                <h3><i class="fas fa-code"></i> Core Computer Science</h3>
+                <p>● <strong>CS-303:</strong> Data Structure (DSA)</p>
+                <p>● <strong>CS-502:</strong> Database Management Systems (DBMS)</p>
+                <p>● <strong>CS-305:</strong> Object Oriented Programming (OOPs)</p>
+                <p>● <strong>CS-402:</strong> Analysis Design of Algorithm (ADA)</p>
+                <div class="cert-link-box">
+                    <span>Foundation of:</span>
+                    <strong>Software Engineering & Problem Solving</strong>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="anim-fade-up delay-2" style="margin-top: 50px; margin-bottom: 20px; font-size: 1.8rem; color: var(--text-light);">Languages & Soft Skills</h3>
+        <div class="grid-container">
+            <div class="card anim-fade-up delay-3">
+                <h3><i class="fas fa-language"></i> Linguistic Proficiency</h3>
+                <p>● <strong>English:</strong> Professional working proficiency (Duolingo Score: 130)</p>
+                <p>● <strong>Hindi:</strong> Native or bilingual proficiency</p>
+            </div>
+            <div class="card anim-fade-up delay-4">
+                <h3><i class="fas fa-users"></i> Management & Soft Skills</h3>
+                <p>● <strong>BT-103:</strong> English for Communication</p>
+                <p>● <strong>CS-803 (D):</strong> Managing Innovation & Entrepreneurship</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <h2 class="section-title anim-slide-left">Licenses, Certifications & Projects</h2>
+        <div class="grid-container">
+            
+            <div class="card anim-scale delay-1">
+                <h3>HTML CSS & JavaScript for Web Dev</h3>
+                <p>Coursera</p>
+                <a href="#" class="view-link"><i class="fas fa-certificate"></i> View Credential</a>
+            </div>
+            <div class="card anim-scale delay-2">
+                <h3>Open Source Dev, Linux & Git</h3>
+                <p>Coursera</p>
+                <a href="#" class="view-link"><i class="fas fa-certificate"></i> View Credential</a>
+            </div>
+            <div class="card anim-scale delay-3">
+                <h3>Microsoft IT Support Specialist</h3>
+                <p>Coursera</p>
+                <a href="#" class="view-link"><i class="fas fa-certificate"></i> View Credential</a>
+            </div>
+            <div class="card anim-scale delay-4">
+                <h3>Introduction to Networking</h3>
+                <p>NVIDIA via Coursera</p>
+                <a href="#" class="view-link"><i class="fas fa-certificate"></i> View Credential</a>
+            </div>
+            <div class="card anim-scale delay-5">
+                <h3>Google AI Essentials</h3>
+                <p>Coursera</p>
+                <a href="#" class="view-link"><i class="fas fa-certificate"></i> View Credential</a>
+            </div>
+
+            <div class="card anim-scale delay-1" style="background: rgba(0, 255, 204, 0.05); border: 1px solid var(--neon-accent);">
+                <h3><i class="fas fa-laptop-code"></i> Amazing Gift Gallery</h3>
+                <p>Fully responsive retail business website.</p>
+                <p style="font-size: 0.8rem;">Tech: HTML5, CSS3, JS</p>
+                <a href="#" class="view-link" style="color: var(--neon-accent);"><i class="fab fa-github"></i> Project Repo</a>
+            </div>
+            <div class="card anim-scale delay-2" style="background: rgba(0, 255, 204, 0.05); border: 1px solid var(--neon-accent);">
+                <h3><i class="fas fa-cut"></i> Malik Tailors</h3>
+                <p>Professional business website layout.</p>
+                <p style="font-size: 0.8rem;">Tech: HTML5, CSS3, JS</p>
+                <a href="#" class="view-link" style="color: var(--neon-accent);"><i class="fab fa-github"></i> Project Repo</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title anim-slide-right">Terminal / Contact</h2>
+        <p class="anim-fade-up delay-1" style="font-size: 1.1rem; color: var(--text-dim); margin-bottom: 30px;">
+            > Waiting for connection... <br>
+            I am always open to discussing tech, web development, or potential project collaborations.
+        </p>
+        
+        <div class="social-grid anim-fade-up delay-2">
+            <a href="https://www.linkedin.com/in/aarizkhan18?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank">
+                <i class="fab fa-linkedin" style="color:#0077b5; font-size: 1.5rem;"></i> LinkedIn
+            </a>
+            <a href="mailto:muhammadaarizkhansocial@gmail.com">
+                <i class="fas fa-envelope" style="color:#ea4335; font-size: 1.5rem;"></i> Email
+            </a>
+            <a href="https://wa.me/917000564354" target="_blank">
+                <i class="fab fa-whatsapp" style="color:#25d366; font-size: 1.5rem;"></i> WhatsApp
+            </a>
+            <a href="tel:+917000564354">
+                <i class="fas fa-phone" style="color:#34b7f1; font-size: 1.5rem;"></i> Call Now
+            </a>
+            <a href="https://t.me/apke_papaji" target="_blank">
+                <i class="fab fa-telegram" style="color:#0088cc; font-size: 1.5rem;"></i> Telegram
+            </a>
+            <a href="https://aariz-blogs.onrender.com" target="_blank">
+                <i class="fas fa-blog" style="color:var(--neon-accent); font-size: 1.5rem;"></i> Tech Blog
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Hamburger Menu Logic
+        const menuBtn = document.getElementById('menu-btn');
+        const navOverlay = document.getElementById('nav-overlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+        let menuOpen = false;
+
+        function toggleMenu() {
+            if(!menuOpen) {
+                menuBtn.classList.add('open');
+                navOverlay.classList.add('active');
+                menuOpen = true;
+                document.body.style.overflow = 'hidden'; 
+            } else {
+                menuBtn.classList.remove('open');
+                navOverlay.classList.remove('active');
+                menuOpen = false;
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        navLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if(window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Typing Effect
+        const roles = ["Front-End Developer.", "Linux Enthusiast.", "IT Support Specialist."];
+        let roleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById("typing-text");
+
+        function typeEffect() {
+            const currentRole = roles[roleIndex];
+            
+            if (isDeleting) {
+                typingElement.textContent = currentRole.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentRole.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let speed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentRole.length) {
+                speed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+                speed = 500;
+            }
+
+            setTimeout(typeEffect, speed);
+        }
+        typeEffect();
+
+        // Advanced Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, observerOptions);
+
+        const animatedElements = document.querySelectorAll('.anim-fade-up, .anim-slide-left, .anim-slide-right, .anim-scale');
+        animatedElements.forEach((el) => observer.observe(el));
+
+    </script>
+</body>
+</html>
