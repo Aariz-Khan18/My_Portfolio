@@ -325,4 +325,3 @@ function animateParticles() {
     connectParticles();
 }
 initParticles(); animateParticles();
-                                                              
