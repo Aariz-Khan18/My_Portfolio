@@ -79,9 +79,20 @@
     transition: width 0.2s, height 0.2s, background-color 0.2s;
 }
 
-/* Custom Theme Scrollbar */
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); border-left: 1px solid rgba(0, 255, 204, 0.1); }
+/* Custom Theme Scrollbar - FIXED FOR MOBILE */
+html {
+    scrollbar-width: thin; /* Firefox fallback */
+    scrollbar-color: var(--neon-purple) var(--bg-dark); /* Firefox fallback */
+}
+
+::-webkit-scrollbar { 
+    width: 6px; /* Slightly thinner for mobile */
+    -webkit-appearance: none; /* Force webkit to apply custom styles on mobile */
+}
+::-webkit-scrollbar-track { 
+    background: var(--bg-dark); 
+    border-left: 1px solid rgba(0, 255, 204, 0.1); 
+}
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(to bottom, var(--neon-accent), var(--neon-purple), var(--neon-pink));
     border-radius: 10px;
@@ -90,11 +101,17 @@
     background: linear-gradient(to bottom, var(--neon-pink), var(--neon-purple), var(--neon-accent)); 
 }
 
-/* Animated Scroll Progress Line */
+/* Animated Scroll Progress Line - FIXED OVERLAP */
 #scroll-progress {
-    position: fixed; top: 0; right: 0; width: 5px; height: 0%;
+    position: fixed; 
+    top: 0; 
+    right: 8px; /* Shifted left to avoid overlapping the native scrollbar */
+    width: 3px; /* Slightly thinner for a cleaner look */
+    height: 0%;
     background: linear-gradient(to bottom, var(--neon-accent), var(--neon-purple), var(--neon-pink));
-    z-index: 9999; box-shadow: 0 0 15px var(--neon-accent); transition: height 0.1s ease-out;
+    z-index: 9999; 
+    box-shadow: 0 0 10px var(--neon-accent); 
+    transition: height 0.1s ease-out;
 }
 
 body {
@@ -290,6 +307,8 @@ footer {
 @media (max-width: 992px) {
     .contact-wrapper { grid-template-columns: 1fr; gap: 40px; }
 }
+
+/* FIXED MOBILE STYLES */
 @media (max-width: 768px) {
     * { cursor: auto; } 
     .cursor-dot, .cursor-outline { display: none; } 
@@ -307,5 +326,6 @@ footer {
     
     .floating-controls { right: 20px; bottom: 20px; }
     
-    #scroll-progress { display: none; }
-    }
+    /* Removed: #scroll-progress { display: none; } */
+    /* Now the progress bar will show on mobile */
+}
