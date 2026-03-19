@@ -325,7 +325,16 @@ footer {
     .footer-content { flex-direction: column; text-align: center; justify-content: center; }
     
     .floating-controls { right: 20px; bottom: 20px; }
-    
-    /* Removed: #scroll-progress { display: none; } */
-    /* Now the progress bar will show on mobile */
+}
+
+/* --- SECRET EASTER EGG LINK --- */
+.secret-link {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.secret-link:hover {
+    color: var(--neon-accent);
+    text-shadow: 0 0 10px var(--neon-accent);
+    cursor: pointer;
 }
