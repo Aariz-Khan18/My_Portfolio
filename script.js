@@ -168,8 +168,7 @@ scrollTopBtn.addEventListener("click", (e) => {
 });
 
 // --- 8. Typing Effect ---
-// Optimization: Included targeted SEO keywords seamlessly into typing loop
-const roles = ["Frontend Developer & UI/UX Designer.", "Linux & Networking Expert.", "IT Support Specialist in India."];
+const roles = ["Frontend & UI/UX.", "IT Support.", "Project Management.", "Tech Policy Analyst.", "IT Consulting.", "Linux & Networking."];
 let roleIndex = 0, charIndex = 0, isDeleting = false;
 const typingElement = document.getElementById("typing-text");
 
