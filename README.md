@@ -2,7 +2,7 @@
 
 A modern and premium personal portfolio website showcasing projects, skills, and web development expertise with a clean and professional design.
 
-🌐 **Live Demo:** https://aariz-portfolio.onrender.com
+🌐 **Live Demo:** https://aariz.co.in
 
 ---
 
